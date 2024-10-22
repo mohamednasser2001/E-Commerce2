@@ -25,23 +25,27 @@ namespace E_Commerse2.Controllers
         [HttpPost]
         public IActionResult Create(Product product,IFormFile ImgUrl)
         {
-            if (ImgUrl.Length > 0)
+            if (ModelState.IsValid)
             {
-                var fileName = Guid.NewGuid().ToString() + Path.GetExtension(ImgUrl.FileName);
-                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\images", fileName);
-                using (var stream = System.IO.File.Create(filePath))
+                if (ImgUrl.Length > 0)
                 {
-                    ImgUrl.CopyTo(stream);
+                    var fileName = Guid.NewGuid().ToString() + Path.GetExtension(ImgUrl.FileName);
+                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\images", fileName);
+                    using (var stream = System.IO.File.Create(filePath))
+                    {
+                        ImgUrl.CopyTo(stream);
+                    }
+
+                    product.ImgUrl = fileName;
                 }
 
-                product.ImgUrl = fileName;
+
+                context.products.Add(product);
+                context.SaveChanges();
+                return RedirectToAction("Index");
+
             }
-
-
-            context.products.Add(product);
-            context.SaveChanges();
-            return RedirectToAction("Index");
-
+            return View( );
 
 
         }
