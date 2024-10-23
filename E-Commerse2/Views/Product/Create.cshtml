@@ -1,4 +1,4 @@
-﻿@model List<Category>
+﻿@model Product
 
 <div class="row">
     <div class="col-12 mb-3">
@@ -13,13 +13,17 @@
     <form action="/Product/Create" method="post" enctype="multipart/form-data">
         <div class="mb-3">
             <label for="ProductName" class="form-label">ProductName</label>
-            <input type="text" class="form-control" id="ProductName" name="Name">
+            <input type="text" class="form-control" id="ProductName" name="Name" value="@Model.Name">
+            <span asp-validation-for="Name"></span>
 
             <label for="ProductDescription" class="form-label">ProductDescription</label>
-            <input type="text" class="form-control" id="ProductDescription" name="Description">
+            <input type="text" class="form-control" id="ProductDescription" name="Description" value="@Model.Description">
+            <span asp-validation-for="Description"></span>
 
             <label for="ProductPrice" class="form-label">ProductPrice</label>
-            <input type="text" class="form-control" id="ProductPrice" name="Price">
+            <input type="text" class="form-control" id="ProductPrice" name="Price" value="@Model.Price">
+            <span asp-validation-for="Price"></span>
+
 
             <label for="ProductImgUrl" class="form-label">ProductImgUrl</label>
             <input type="file" class="form-control" id="ProductImgUrl" name="ImgUrl" onchange="previewImage(event)">
@@ -34,8 +38,9 @@
 
 
             <label for="exampleSelect1"  class="form-label mt-4">Example select</label>
-            <select class="form-select" id="exampleSelect1" name="CategoryId">
-                    @foreach(var item in Model){
+            <select class="form-select" id="exampleSelect1" name="CategoryId" value="@Model.CategoryId">
+                @foreach (var item in @ViewBag.Categories)
+                {
                         <option value="@item.Id">@item.Name</option>
                     }
                     

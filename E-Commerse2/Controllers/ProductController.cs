@@ -18,8 +18,10 @@ namespace E_Commerse2.Controllers
         public IActionResult Create()
         {
             var categorys =context.categories.ToList();
+            ViewBag.Categories = categorys;
+            Product product = new Product();
 
-            return View(model:categorys);
+            return View(product);
         }
 
         [HttpPost]
@@ -45,7 +47,9 @@ namespace E_Commerse2.Controllers
                 return RedirectToAction("Index");
 
             }
-            return View( );
+            var categorys = context.categories.ToList();
+            ViewBag.Categories = categorys;
+            return View(product);
 
 
         }
