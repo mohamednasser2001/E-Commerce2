@@ -13,15 +13,15 @@
     <form action="/Product/Create" method="post" enctype="multipart/form-data">
         <div class="mb-3">
             <label for="ProductName" class="form-label">ProductName</label>
-            <input type="text" class="form-control" id="ProductName" name="Name" value="@Model.Name">
+            <input class="form-control" asp-for="Name">
             <span asp-validation-for="Name"></span>
 
             <label for="ProductDescription" class="form-label">ProductDescription</label>
-            <input type="text" class="form-control" id="ProductDescription" name="Description" value="@Model.Description">
+            <input class="form-control" asp-for="Description"> 
             <span asp-validation-for="Description"></span>
 
             <label for="ProductPrice" class="form-label">ProductPrice</label>
-            <input type="text" class="form-control" id="ProductPrice" name="Price" value="@Model.Price">
+            <input class="form-control" asp-for="Price">
             <span asp-validation-for="Price"></span>
 
 
@@ -34,18 +34,21 @@
             </div>
 
             <label for="CategoryId" class="form-label">CategoryId</label>
-        @*     <input type="number" class="form-control" id="CategoryId" name="CategoryId"> *@
+            @*     <input class="form-control" asp-for="CategoryId"> *@
 
 
             <label for="exampleSelect1"  class="form-label mt-4">Example select</label>
-            <select class="form-select" id="exampleSelect1" name="CategoryId" value="@Model.CategoryId">
+         @*    <select class="form-select" id="exampleSelect1" name="CategoryId" value="@Model.CategoryId">
                 @foreach (var item in @ViewBag.Categories)
                 {
                         <option value="@item.Id">@item.Name</option>
                     }
                     
                   
-                </select>
+                </select> *@
+            <select asp-for="CategoryId" asp-items="ViewBag.Categories" class="form-select"></select>
+             <span asp-validation-for="CategoryId"></span>
+
             
 
         </div>
@@ -70,3 +73,9 @@
         }
     }
 </script>
+
+
+@section Scripts{
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+}

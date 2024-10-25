@@ -9,7 +9,7 @@
     <form action="/Category/Create" method="post">
         <div class="mb-3">
             <label for="CategoryName" class="form-label">CategoryName</label>
-            <input type="text" class="form-control" id="CategoryName" name="Name" value="@Model.Name">
+            <input  class="form-control" asp-for="Name">
             <span asp-validation-for="Name"></span>
           
         </div>
@@ -23,3 +23,7 @@
 
  
 </div>
+@section Scripts {
+   
+    <partial name="_ViewImports.cshtml"></partial>
+}

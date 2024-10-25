@@ -1,6 +1,7 @@
 ﻿using E_Commerse2.Data;
 using E_Commerse2.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
 namespace E_Commerse2.Controllers
@@ -10,14 +11,15 @@ namespace E_Commerse2.Controllers
         ApplicationDbContext context = new ApplicationDbContext();
         public IActionResult Index()
         {
-            var products=context.products.Include(e=>e.Category).ToList();
-            return View(model:products);
+            var products = context.products.Include(e => e.Category).ToList();
+            return View(model: products);
 
         }
 
         public IActionResult Create()
         {
-            var categorys =context.categories.ToList();
+            var categorys = context.categories.ToList()
+             .Select(e => new SelectListItem(text = e.Name, value e.Id.ToString()} );
             ViewBag.Categories = categorys;
             Product product = new Product();
 

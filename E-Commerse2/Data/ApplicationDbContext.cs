@@ -7,6 +7,7 @@ namespace E_Commerse2.Data
     {
         public DbSet<Product> products { get; set; }
         public DbSet<Category> categories { get; set; }
+        public DbSet<Company> companies { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);
