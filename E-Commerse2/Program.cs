@@ -1,3 +1,10 @@
+using E_Commerse2.Data;
+using E_Commerse2.Migrations;
+using E_Commerse2.Repository;
+using E_Commerse2.Repository.IRepository;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+
 namespace E_Commerse2
 {
     public class Program
@@ -8,6 +15,14 @@ namespace E_Commerse2
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+            builder.Services.AddDbContext<ApplicationDbContext>(
+             option => option.UseSqlServer(builder.Configuration.GetConnectionString("DefualtConection")));
+
+            builder.Services.AddIdentity<ApplicationUser, IdentityRole>
+                (option => { option.Password.RequireDigit = false;option.Password.RequiredLength = 6; })
+                .AddEntityFrameworkStores<ApplicationDbContext>();
+               
+            builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 
             var app = builder.Build();
 

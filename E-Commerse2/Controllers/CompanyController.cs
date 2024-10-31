@@ -6,10 +6,10 @@ namespace E_Commerse2.Controllers
 {
     public class CompanyController : Controller
     {
-        ApplicationDbContext context=new ApplicationDbContext();
+        ApplicationDbContext context = new ApplicationDbContext();
         public IActionResult Index()
         {
-            var companiess=context.companies.ToList();
+            var companiess = context.Companies.ToList();
             return View(companiess);
         }
 
@@ -24,7 +24,7 @@ namespace E_Commerse2.Controllers
         {
             if (ModelState.IsValid)
             {
-                context.companies.Add(Company);
+                context.Companies.Add(Company);
                 context.SaveChanges();
 
 
@@ -41,7 +41,7 @@ namespace E_Commerse2.Controllers
 
         public IActionResult Edit(int companyId)
         {
-            var company = context.companies.Find(companyId);
+            var company = context.Companies.Find(companyId);
             if (company != null)
             {
                 return View(model: company);
@@ -58,7 +58,7 @@ namespace E_Commerse2.Controllers
         {
             if (ModelState.IsValid)
             {
-                context.companies.Update(company);
+                context.Companies.Update(company);
                 context.SaveChanges();
                 return RedirectToAction(nameof(Index));
             }

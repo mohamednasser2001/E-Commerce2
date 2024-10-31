@@ -3,6 +3,7 @@ using E_Commerse2.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json.Linq;
 
 namespace E_Commerse2.Controllers
 {
@@ -19,7 +20,11 @@ namespace E_Commerse2.Controllers
         public IActionResult Create()
         {
             var categorys = context.categories.ToList()
-             .Select(e => new SelectListItem(text = e.Name, value e.Id.ToString()} );
+             .Select(e => new SelectListItem()
+             {
+                 Text = e.Name,
+                 Value = e.Id.ToString()
+             });
             ViewBag.Categories = categorys;
             Product product = new Product();
 

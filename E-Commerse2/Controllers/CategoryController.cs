@@ -1,5 +1,7 @@
 ﻿using E_Commerse2.Data;
 using E_Commerse2.Models;
+using E_Commerse2.Repository;
+using E_Commerse2.Repository.IRepository;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -7,10 +9,17 @@ namespace E_Commerse2.Controllers
 {
     public class CategoryController : Controller
     {
-        ApplicationDbContext context = new ApplicationDbContext();
+        //ApplicationDbContext context = new ApplicationDbContext();
+        //CategoryRepository categoryRepository=new CategoryRepository();
+        ICategoryRepository categoryRepository;
+        public CategoryController(ICategoryRepository categoryRepository)
+        {
+            this.categoryRepository = categoryRepository;
+        }
+
         public IActionResult Index()
         {
-            var categoryes=context.categories.Include(e=>e.Products).ToList();
+            var categoryes = categoryRepository.GetAll("Products");
             return View(model:categoryes);
            
         }
@@ -25,8 +34,11 @@ namespace E_Commerse2.Controllers
         {
             if (ModelState.IsValid)
             {
-                context.categories.Add(category);
-                context.SaveChanges();
+                //context.categories.Add(category);
+                //context.SaveChanges();
+                categoryRepository.Create(category);
+                categoryRepository.Commit();
+
 
 
                 //TempData["success"] = "Add New Category Success";
@@ -42,7 +54,7 @@ namespace E_Commerse2.Controllers
 
         public IActionResult Edit( int categoryId)
         {
-            var category = context.categories.Find(categoryId);
+            var category = categoryRepository.GetAll(e=>e.Id==categoryId);
             if (category != null) {
                 return View(model: category);
             }
@@ -57,8 +69,11 @@ namespace E_Commerse2.Controllers
         public IActionResult Edit(Category category)
         {
             if (ModelState.IsValid) {
-                context.categories.Update(category);
-                context.SaveChanges();
+                //context.categories.Update(category);
+                //context.SaveChanges();
+
+                categoryRepository.Edit(category);
+                categoryRepository.Commit();
                 return RedirectToAction(nameof(Index));
             }
             return View(category);
@@ -67,9 +82,11 @@ namespace E_Commerse2.Controllers
 
         public IActionResult Delete(int categoryId)
         {
-            Category category=new Category() { Id = categoryId };
-            context.categories.Remove(category);
-            context.SaveChanges();
+            var category=categoryRepository.GetAll(e=>e.Id==categoryId);
+            //context.categories.Remove(category);
+            //context.SaveChanges();
+            categoryRepository.Delete(category);
+            categoryRepository.Commit();
             return RedirectToAction(nameof(Index));
 
         }
