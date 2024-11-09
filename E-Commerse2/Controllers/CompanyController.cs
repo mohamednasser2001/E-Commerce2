@@ -1,9 +1,12 @@
 ﻿using E_Commerse2.Data;
 using E_Commerse2.Models;
+using E_Commerse2.Utility;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace E_Commerse2.Controllers
 {
+    [Authorize(Roles = $"{SD.AdminRole},{SD.CommpanyRole}")]
     public class CompanyController : Controller
     {
         ApplicationDbContext context = new ApplicationDbContext();

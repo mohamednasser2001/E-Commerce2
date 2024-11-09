@@ -1,7 +1,10 @@
 ﻿using E_Commerse2.Migrations;
+using E_Commerse2.Utility;
 using E_Commerse2.ViewModel;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
+using System.Security.Permissions;
 
 namespace E_Commerse2.Controllers
 {
@@ -9,14 +12,23 @@ namespace E_Commerse2.Controllers
     {
         private readonly UserManager<ApplicationUser> userManager;
         private readonly SignInManager<ApplicationUser> signInManager;
+        private readonly RoleManager<IdentityRole> roleManager;
 
-        public AcountController(UserManager<ApplicationUser>userManager,SignInManager<ApplicationUser>signInManager)
+        public AcountController(UserManager<ApplicationUser>userManager,
+            SignInManager<ApplicationUser>signInManager,RoleManager<IdentityRole>roleManager)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
+            this.roleManager = roleManager;
         }
-        public IActionResult Register()
+        public async Task<IActionResult> Register()
         {
+            if (roleManager.Roles.IsNullOrEmpty())
+            {
+                await roleManager.CreateAsync(new(SD.AdminRole));
+                await roleManager.CreateAsync(new(SD.CustomerRole));
+                await roleManager.CreateAsync(new(SD.CommpanyRole));
+            }
             return View();
         }
         [HttpPost]
@@ -31,8 +43,11 @@ namespace E_Commerse2.Controllers
                     Address = userVM.Address
                 };
                   var result=await userManager.CreateAsync(applicationUser,userVM.Password);
-                if (result.Succeeded) { 
-                   RedirectToAction("Index", "Home");
+                if (result.Succeeded) {
+
+                    var role=await userManager.AddToRoleAsync(applicationUser, SD.CustomerRole);
+                    await signInManager.SignInAsync(applicationUser, false);
+                    return  RedirectToAction("Index", "Home");
                 }
                 else
                 {
@@ -79,7 +94,7 @@ namespace E_Commerse2.Controllers
         public IActionResult Logout()
         {
             signInManager.SignOutAsync();
-            return RedirectToAction("Logn");
+            return RedirectToAction("Login");
 
         }
     }

@@ -1,5 +1,7 @@
 ﻿using E_Commerse2.Data;
 using E_Commerse2.Models;
+using E_Commerse2.Utility;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -7,13 +9,26 @@ using Newtonsoft.Json.Linq;
 
 namespace E_Commerse2.Controllers
 {
+    [Authorize(Roles = $"{SD.AdminRole},{SD.CommpanyRole}")]
     public class ProductController : Controller
     {
         ApplicationDbContext context = new ApplicationDbContext();
-        public IActionResult Index()
+        public IActionResult Index(int page=1)
         {
-            var products = context.products.Include(e => e.Category).ToList();
-            return View(model: products);
+            if (page < 1)
+            {
+                page = 1;
+            }
+           
+              IQueryable<Product> products = context.products.Include(e => e.Category);
+            if(page <= products.Count() / 5)
+            {
+                products = products.Skip((page - 1) * 5).Take(5);
+                return View(model: products.ToList());
+            }
+            return RedirectToAction("NotFound", "Home");
+            
+           
 
         }
 
